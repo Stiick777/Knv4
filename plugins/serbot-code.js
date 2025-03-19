@@ -77,20 +77,19 @@ let handler = async (m, { conn: star, args, usedPrefix, command, isOwner }) => {
         setTimeout(async () => {
             let codeBot = await conn.requestPairingCode(cleanedNumber)
             codeBot = codeBot?.match(/.{1,4}/g)?.join("-") || codeBot
-            let txt = `✿ *Vincula tu cuenta usando el codigo.*\n\n`
-                txt += `[ ✰ ] Sigue las instrucciones:\n`
-                txt += `*» Mas opciones*\n`
-                txt += `*» Dispositivos vinculados*\n`
-                txt += `*» Vincular nuevo dispositivo*\n`
-                txt += `*» Vincular usando numero*\n\n`
-                txt += `> *Nota:* Este Código solo funciona en el número que lo solicito`
+           let txt = `✿ *Usa este Código para convertirte en Bot temporal*\n\n`;  
+txt += `» 1. Haga click en los tres puntos en la esquina superior derecha.\n`;  
+txt += `» 2. Toque Dispositivos vinculados\n`;  
+txt += `» 3. Selecciona *Vincular con el número de teléfono*\n`;  
+txt += `» 4. Pegue el código\n\n`;  
+txt += `> *Nota:* El código solo sirve para este número`;
             let imgUrl = 'https://i.ibb.co/SKKdvRb/code.jpg'; // Imagen a enviar  
-            let sendTxt = await star.reply(m.chat, txt, m, rcanal)
+          //  let sendTxt = await star.reply(m.chat, txt, m, rcanal)
           //  let sendCode = await star.reply(m.chat, codeBot, m, rcanal)
         
 
     // Enviar mensaje con imagen y botón  
-    await star.sendButton2(m.chat, txt, "🔗 Vincular ahora", imgUrl, [], codeBot, null, m);  
+    await star.sendButton2(m.chat, txt, "⚡ KanBot", imgUrl, [], codeBot, null, m);  
     
             setTimeout(() => {
                 star.sendMessage(m.chat, { delete: sendTxt })
