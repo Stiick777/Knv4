@@ -84,10 +84,14 @@ let handler = async (m, { conn: star, args, usedPrefix, command, isOwner }) => {
                 txt += `*» Vincular nuevo dispositivo*\n`
                 txt += `*» Vincular usando numero*\n\n`
                 txt += `> *Nota:* Este Código solo funciona en el número que lo solicito`
-            let pp = "./storage/mp4/serbot.mp4"
+            let imgUrl = 'https://i.ibb.co/SKKdvRb/code.jpg'; // Imagen a enviar  
             let sendTxt = await star.reply(m.chat, txt, m, rcanal)
-            let sendCode = await star.reply(m.chat, codeBot, m, rcanal)
+          //  let sendCode = await star.reply(m.chat, codeBot, m, rcanal)
         
+
+    // Enviar mensaje con imagen y botón  
+    await star.sendButton2(m.chat, txt, "🔗 Vincular ahora", imgUrl, [], codeBot, null, m);  
+    
             setTimeout(() => {
                 star.sendMessage(m.chat, { delete: sendTxt })
                 star.sendMessage(m.chat, { delete: sendCode })
