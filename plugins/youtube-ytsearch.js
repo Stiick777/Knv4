@@ -37,9 +37,5 @@ handler.tags = ['search']
 handler.command = ['yts', 'ytsearch']   
 handler.disabled = false  
 handler.group = true  
-  
-export default handler;handler.command = ['yts', 'ytsearch'];
-handler.disabled = false;
-handler.group = true;
-
+ 
 export default handler;
