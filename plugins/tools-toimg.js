@@ -1,6 +1,6 @@
 import { webp2png } from '../lib/webp2mp4.js'
 let handler = async (m, { conn, usedPrefix, command }) => {
-const notStickerMessage = `🚩 Responde a un *Sticker.*`
+const notStickerMessage = `✳️ Responde a un *Sticker.*`
 if (!m.quoted) return conn.reply(m.chat, notStickerMessage, m, rcanal)
 const q = m.quoted || m
 let mime = q.mediaType || ''
@@ -15,8 +15,8 @@ await m.react('✅')
 await m.react('✖️')
 }}
 handler.help = ['toimg *<sticker>*']
-handler.tags = ['sticker', 'tools']
+handler.tags = [ 'tools']
 handler.command = ['toimg', 'jpg', 'aimg'] 
-handler.register = true
+group = true
 
 export default handler
