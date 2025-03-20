@@ -30,7 +30,7 @@ let handler = async (m, { conn, command, text, args, usedPrefix }) => {
 };
 
 handler.help = ['play'];
-handler.tags = ['dl'];
+handler.tags = ['downloader'];
 handler.command = ['play', 'play2'];
 handler.disabled = false;
 handler.group = true;
