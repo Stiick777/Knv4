@@ -11,6 +11,7 @@ let name = conn.getName(m.sender)
 await conn.sendMessage(m.chat, { video: { url: [pp, pp2].getRandom() }, gifPlayback: true, caption: `*${name}*` + ' está bailando con' + ` *${name2}*` + ' (ﾉ^ヮ^)ﾉ*:・ﾟ✧' }, { quoted: m })
 }
 handler.help = ['dance *<@user>*']
-handler.tags = ['fun']
+handler.tags = ['game']
+handler.group = true 
 handler.command = ['dance', 'bailar']
 export default handler
