@@ -4,7 +4,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     let [atas, bawah] = text.split`|`
     let q = m.quoted ? m.quoted : m
     let mime = (q.msg || q).mimetype || ''
-    if (!mime) return m.reply(`🚩 Responde a una imagen e ingresa un texto junto al comando.`)
+    if (!mime) return m.reply(`✳️ Responde a una imagen e ingresa un texto junto al comando.`)
     try {
     if (!/image\/(jpe?g|png)/.test(mime)) return await m.react('✖️')
     await m.react('🕓')
@@ -20,5 +20,5 @@ await m.react('✖️')
 handler.help = ['smeme *<texto>*']
 handler.tags = ['sticker']
 handler.command = /^(smeme)$/i
-handler.register = true 
+handler.group = true 
 export default handler
