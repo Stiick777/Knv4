@@ -16,6 +16,6 @@ handler.help = ['shinobu']
 handler.tags = ['img']
 handler.command = ['shinobu']
 //handler.limit = 1
-handler.register = true 
+handler.group = true 
 
 export default handler
