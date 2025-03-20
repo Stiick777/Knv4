@@ -14,7 +14,7 @@ const handler = async (m, { conn }) => {
   }
 
   // Cargar acertijos desde el archivo JSON
-  const tekateki = JSON.parse(fs.readFileSync('./src/game/acertijo.json'));
+  const tekateki = JSON.parse(fs.readFileSync('./storage/game/acertijo.json'));
   const json = tekateki[Math.floor(Math.random() * tekateki.length)];
 
   const caption = `
