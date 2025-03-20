@@ -4,25 +4,25 @@ import fetch from 'node-fetch'
 import { xpRange } from '../lib/levelling.js'
 
 let tags = {
-  'main': 'Information',
-  'search': 'Search',
-  'game': 'Games',
-  'serbot': 'Sub-Bots',
-  'rpg': 'Rpg',
-  'rg': 'Registro',
-  'sticker': 'Sticker',
-  'img': 'Image',
-  'group': 'Groups',
-  'nable': 'On / Off', 
-  'premium': 'Premium',
-  'downloader': 'Download',
-  'tools': 'Tools',
-  'fun': 'Fun',
-  'nsfw': 'Nsfw', 
-  'cmd': 'Database',
-  'owner': 'Creador', 
-  'audio': 'Audios', 
-  'advanced': 'Avanzado',
+  'main': 'INFORMATION',  
+'search': 'SEARCH',  
+'game': 'GAMES',  
+'serbot': 'SUB-BOTS',  
+'rpg': 'RPG',  
+'rg': 'REGISTRO',  
+'sticker': 'STICKER',  
+'img': 'IMAGE',  
+'group': 'GROUPS',  
+'nable': 'ON / OFF',  
+'premium': 'PREMIUM',  
+'downloader': 'DOWNLOAD',  
+'tools': 'TOOLS',  
+'fun': 'FUN',  
+'nsfw': 'NSFW',  
+'cmd': 'DATABASE',  
+'owner': 'CREADOR',  
+'audio': 'AUDIOS',  
+'advanced': 'AVANZADO',
 }
 
 const defaultMenu = {
@@ -30,9 +30,9 @@ const defaultMenu = {
 ◈ ━━━━━ *ᴋᴀɴʙᴏᴛ ┃ ⱽ²* ━━━━━ ◈
  
 👋🏻 Hola! *%name*
-👥 Usuarios : %totalreg
-🟢 Tiempo activo : %muptime
-%sbot
+👥 Usuarios : *%totalreg*
+🟢 Tiempo activo : *%muptime*
+
 ▢  FOLLOW ME
 • https://whatsapp.com/channel/0029VakhAHc5fM5hgaQ8ed2N
 ────────────
