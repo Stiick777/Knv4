@@ -45,7 +45,7 @@ try {
 };
 
 handler.help = ['ytmp4doc *<link yt>*'];
-handler.tags = ['ddownloader'];
+handler.tags = ['downloader'];
 handler.command = ['ytmp4doc', 'yt4doc'];
 handler.group = true;
 
