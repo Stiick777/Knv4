@@ -1,37 +1,32 @@
-import Starlights from '@StarlightsTeam/Scraper'
-import fetch from 'node-fetch'
+import fetch from 'node-fetch';
 
-let handler = async (m, { conn, text, usedPrefix, command }) => {
-if (!text) return conn.reply(m.chat,`*🚩 Ingrese su petición*\n*🪼 Ejemplo de uso:* ${usedPrefix + command} como hacer estrella de papel`, m, rcanal)
-await m.react('💬')
-try {
-let { msg } = await Starlights.openAi(text)
-await conn.reply(m.chat, msg, m, rcanal)
-} catch {
-try {
-let { result } = await Starlights.ChatGpt(text)
-await conn.reply(m.chat, result, m, rcanal)
-} catch {
-try {
-let { result } = await Starlights.ChatGptV2(text)
-await conn.reply(m.chat, result, m, rcanal)
-} catch {
-try {
-let api = await fetch(`https://apis-starlights-team.koyeb.app/starlight/chatgpt?text=${text}`)
-let json = await api.json()
+let handler = async (m, { conn, usedPrefix, command, text }) => {
+    if (!text) {
+        return conn.reply(m.chat, `💡 *Ingrese su petición*\n⚡ *Ejemplo de uso:* ${usedPrefix + command} Hola, ¿cómo estás?`, m);
+    }
 
-if (json.result) {
-await conn.reply(m.chat, json.result, m, rcanal)
-} else {
-await m.react('✖️')
-}
-} catch {
-await m.react('✖️')
-}}}}}
+    try {
+        await m.react('💭');
 
-handler.help = ['ia *<petición>*']
-handler.tags = ['tools']
-handler.command = /^(miku|ia|chatgpt|gpt)$/i
-handler.register = true
+        const response = await fetch(`https://mahiru-shiina.vercel.app/ai/chatgpt4?text=${encodeURIComponent(text)}`);
+        const data = await response.json();
 
-export default handler
+        if (data.status && data.answer) {
+            await conn.reply(m.chat, `*Hola!👋 soy KanBot Provided By Stiiven*:\n${data.answer}`, m);
+        } else {
+            await m.react('❌');
+            await conn.reply(m.chat, '❌ Error: No se obtuvo una respuesta válida.', m);
+        }
+    } catch (error) {
+        await m.react('❌');
+        console.error('❌ Error al obtener la respuesta:', error);
+        await conn.reply(m.chat, 'Error: intenta más tarde.', m);
+    }
+};
+
+handler.help = ['ia <texto>'];
+handler.tags = ['tools'];
+handler.command = ['ia', 'chatgpt'];
+handler.group = true;
+
+export default handler;
