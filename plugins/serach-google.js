@@ -20,5 +20,5 @@ handler.help = ['google *<texto>*']
 handler.tags = ['tools', 'search']
 handler.command = /^googlef?$/i
 //handler.limit = 1
-handler.register = true 
+handler.group = true 
 export default handler;
