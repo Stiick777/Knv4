@@ -3,7 +3,7 @@ import { toAudio } from '../lib/converter.js'
 let handler = async (m, { conn, usedPrefix, command }) => {
 let q = m.quoted ? m.quoted : m
 let mime = (m.quoted ? m.quoted : m.msg).mimetype || ''
-if (!/video|audio/.test(mime)) return conn.reply(m.chat, `🚩 Responde al *Video* o *Nota de Voz* que desea convertir a mp3.`, m, rcanal)
+if (!/video|audio/.test(mime)) return conn.reply(m.chat, `✳️ Responde al *Video* o *Nota de Voz* que desea convertir a mp3.`, m, rcanal)
 await m.react('🕓')
 try {
 let media = await q.download?.()
@@ -18,6 +18,6 @@ await m.react('✖️')
 handler.help = ['tomp3']
 handler.tags = ['tools']
 handler.command = ['tomp3', 'toaudio', 'mp3'] 
-handler.register = true
+group = true
 
 export default handler
