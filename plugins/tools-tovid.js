@@ -25,7 +25,7 @@ await m.react('✅')
 await m.react('✖️')
 }}
 handler.help = ['tovid *<sticker>*']
-handler.tags = ['sticker', 'tools']
+handler.tags = ['tools']
 handler.command = ['tovideo', 'tovid']
 handler.group = true
 
