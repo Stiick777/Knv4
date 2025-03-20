@@ -1,6 +1,6 @@
 let handler = async (m, { conn, command, text }) => {
 	
-    if (!text) return m.reply(`🚩 Ingresa un nombre justo al comando.`)
+    if (!text) return m.reply(`✳️ Ingresa un nombre justo al comando.`)
 	
   let personalidad = `
 ┏━━°❀❬ *PERSONALIDAD}* ❭❀°━━┓
@@ -21,9 +21,9 @@ let handler = async (m, { conn, command, text }) => {
 conn.reply(m.chat, personalidad, m, { mentions: conn.parseMention(personalidad) })
 }
 handler.help = ['personalidad *<nombre>*']
-handler.tags = ['fun']
+handler.tags = ['game']
 handler.command = /^personalidad/i
-
+handler.group = true 
 export default handler 
 
 function pickRandom(list) {
