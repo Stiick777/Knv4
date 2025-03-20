@@ -67,31 +67,28 @@ let handler = async (m, { conn, usedPrefix }) => {
    let timestamp = speed()
    let latensi = speed() - timestamp
    let txt = '`*⭒─ׄ─ׅ─ׄ─⭒ Info Bot ⭒─ׄ─ׅ─ׄ─⭒*`\n\n'
-       txt += `╭── ︿︿︿︿︿ *⭒   ⭒   ⭒   ⭒   ⭒   ⭒*\n`
-       txt += `┊ ‹‹ *Status De* :: *Ai Hoshino ดาว⁩*\n`
-       txt += `┊•*⁀➷ °⭒⭒⭒ *【 ✯ Starlights Team ✰ 】*\n`
-       txt += `╰─── ︶︶︶︶ ✰⃕  ⌇ *⭒ ⭒ ⭒*   ˚̩̥̩̥*̩̩͙✩\n`
-       txt += `┊🪴 [ *Moneda* :: *Estrellas ⭐*\n`
-       txt += `┊🍟 [ *Prefijo* :: *【  ${usedPrefix}  】*\n`
-       txt += `┊✨ [ *Plugins* :: *${totalf}*\n`
+       
+       txt += `┊ ‹‹ *Status De* :: *𝙺𝚊𝚗𝙱𝚘𝚝⁩*\n`
+    
+       txt += `┊✳️ [ *Prefijo* :: *【  ${usedPrefix}  】*\n`
+       txt += `┊🌙 [ *Plugins* :: *${totalf}*\n`
        txt += `┊☁️ [ *Sub-Bots* :: *${totalUsers || '0'}*\n`
-       txt += `┊🍟 [ *Plataforma* :: *${platform()}*\n`
+       txt += `┊🏷️ [ *Plataforma* :: *${platform()}*\n`
        txt += `┊🍁 [ *RAM* :: *${format(totalmem() - freemem())} / ${format(totalmem())}*\n`
-       txt += `┊🌸 [ *FreeRAM* :: *${format(freemem())}*\n`
+       txt += `┊📍 [ *FreeRAM* :: *${format(freemem())}*\n`
        txt += `┊🍄 [ *Speed* :: *${latensi.toFixed(4)} ms*\n`
-       txt += `┊💐 [ *Comandos Ejecutados* :: *${formatNumber(totalStats)}*\n`
+       txt += `┊📌 [ *Comandos Ejecutados* :: *${formatNumber(totalStats)}*\n`
        txt += `┊🌴 [ *Grupos Registrados* :: *${formatNumber(totalchats)}*\n`
-       txt += `┊🌺 [ *Registrados* :: *${formatNumber(totalreg)} Usuarios*\n`
        txt += `╰─────────\n\n`
-       txt += `> 🚩 ${textbot}`
+       txt += `> ⚡ ${textbot}`
 
-let img = `./storage/img/menu.jpg`
+let img = `https://tinyurl.com/2czt4my6`
 await conn.sendFile(m.chat, img, 'thumbnail.jpg', txt, m, null, rcanal)
 }
 handler.help = ['info']
 handler.tags = ['main']
 handler.command = ['info', 'infobot']
-
+handler.group = true
 export default handler
 
 function formatNumber(number) {

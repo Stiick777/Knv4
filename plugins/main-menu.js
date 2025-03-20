@@ -17,7 +17,6 @@ let tags = {
 'premium': 'PREMIUM',  
 'downloader': 'DOWNLOAD',  
 'tools': 'TOOLS',  
-'fun': 'FUN',  
 'nsfw': 'NSFW',  
 'cmd': 'DATABASE',  
 'owner': 'CREADOR',  

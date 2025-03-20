@@ -1,16 +1,16 @@
 import fetch from 'node-fetch'
 
 export async function before(m, { conn }) {
-let img = await (await fetch(`https://tinyurl.com/2c5hk765`)).buffer()
+let img = await (await fetch(`https://tinyurl.com/26dnmhay`)).buffer()
 
   const canales = [
     {
-      id: "120363191779210764@newsletter",
-      nombre: "【 ✯ Starlights Team - Oficial Chanel ✰ 】",
+      id: "120363318891913110@newsletter",
+      nombre: "✰ 𝙺𝚊𝚗𝙱𝚘𝚝 ✰",
     },
     {
-      id: "120363352146629838@newsletter",
-      nombre: "✰ Let Go Vibes World ダーク",
+      id: "120363318891913110@newsletter",
+      nombre: "✰ 𝙺𝚊𝚗𝙱𝚘𝚝 ✰",
     },
   ]
 
