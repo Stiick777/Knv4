@@ -5,6 +5,6 @@ let love = `*❤️❤️ MEDIDOR DE AMOR ❤️❤️*
 `.trim()
 m.reply(love, null, { mentions: conn.parseMention(love) })}
 handler.help = ['love *@user*']
-handler.tags = ['fun']
+handler.tags = ['game']
 handler.command = /^(love)$/i
 export default handler
