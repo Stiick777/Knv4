@@ -5,6 +5,6 @@ let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? c
   }), 'error.png', '*Quien quiere violar a este gay?* 🏳️‍🌈', m)
 }
 handler.help = ['gay *@user*']
-handler.tags = ['fun']
+handler.tags = ['game']
 handler.command = /^(gay)$/i
 export default handler
