@@ -1,28 +1,58 @@
-import Starlights from '@StarlightsTeam/Scraper'
+// [ ❀ SPOTIFY PLAY ]    
+import fetch from 'node-fetch';    
 
-let handler = async (m, { conn, command, args, text, usedPrefix }) => {
-  if (!text) return conn.reply(m.chat, '🚩 Ingresa el título de un video o canción de YouTube.\n\n`Ejemplo:`\n' + `> *${usedPrefix + command}* Gemini Aaliyah - If Only`, m, rcanal)
-  await m.react('🕓')
-  try {
-    let res = await Starlights.spotifySearch(text)
-    let img = await (await fetch(`${res[0].thumbnail}`)).buffer()
-    let txt = '`乂  S P O T I F Y  -  S E A R C H`'
-    for (let i = 0; i < res.length; i++) {
-      txt += `\n\n`
-      txt += `  *» Nro* : ${i + 1}\n`
-      txt += `  *» Titulo* : ${res[i].title}\n`
-      txt += `  *» Artista* : ${res[i].artist}\n`
-      txt += `  *» Url* : ${res[i].url}`
-    }
-    
-await conn.sendFile(m.chat, img, 'thumbnail.jpg', txt, m, null, rcanal)
-await m.react('✅')
-} catch {
-await m.react('✖️')
-}}
-handler.help = ['spotifysearch *<búsqueda>*']
-handler.tags = ['search']
-handler.command = ['spotifysearch']
-handler.register = true
+let handler = async (m, { conn, command, text }) => {    
+  if (!text) return conn.reply(m.chat, '❀ Ingresa el texto de lo que quieras buscar', m);    
 
-export default handler
+  try {    
+    // Búsqueda en Spotify    
+    let apiSearch = await fetch(`https://api.agungny.my.id/api/spotifys?q=${encodeURIComponent(text)}`);    
+    let jsonSearch = await apiSearch.json();    
+
+    if (!jsonSearch.status || !jsonSearch.result.length) {    
+      return conn.reply(m.chat, '❀ No se encontraron resultados.', m);    
+    }    
+
+    let { name, artists, link, image, duration_ms } = jsonSearch.result[0];    
+
+    // Descarga de Spotify    
+    let apiDL = await fetch(`https://api.agungny.my.id/api/spotify?url=${encodeURIComponent(link)}`);    
+    let jsonDL = await apiDL.json();    
+
+    if (!jsonDL.status) {    
+      return conn.reply(m.chat, '❀ No se pudo descargar la canción.', m);    
+    }    
+
+    let { title, download, image: songImage, duration_ms: songDuration } = jsonDL.result;    
+
+    let HS = `    
+❀ *Spotify Play*    
+
+- 🎵 *Título:* ${title}    
+- 🎤 *Artista:* ${artists}    
+- ⏳ *Duración:* ${(songDuration / 1000).toFixed(0)}s    
+- 🔗 *Spotify Link:* ${link}    
+- 📥 *Descargar:* [Click aquí](${download})    
+    `.trim();    
+
+    // Enviar imagen con el texto    
+    await conn.sendFile(m.chat, songImage, 'spotify.jpg', HS, m);    
+
+    // Descargar el audio antes de enviarlo    
+    let audioBuffer = await (await fetch(download)).buffer();    
+
+    // Enviar el audio como mensaje de audio    
+    await conn.sendMessage(m.chat, { audio: audioBuffer, mimetype: 'audio/mp3' }, { quoted: m });    
+
+  } catch (error) {    
+    console.error(error);    
+    conn.reply(m.chat, '❀ Ocurrió un error al procesar la solicitud.', m);    
+  }    
+};    
+
+handler.command = /^(spotify)$/i;    
+handler.tags = ['descargas'];  
+handler.help = ['spotify <texto>'];  
+handler.group = true;    
+
+export default handler;
