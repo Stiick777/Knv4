@@ -15,6 +15,6 @@ handler.command = ['neko2']
 handler.tags = ['img']
 handler.help = ['neko2']
 //handler.limit = 1
-handler.register = true 
+handler.group = true 
 
 export default handler
