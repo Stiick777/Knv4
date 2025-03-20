@@ -27,19 +27,6 @@ let handler = async (m, { conn, command, text, args, usedPrefix }) => {
 ▢ 👀 *Vistas:* ${vid.views.toLocaleString()}
 └──────────────`;
 
-    if (business) {
-        conn.sendFile(m.chat, thumbnail, "error.jpg", `${playMessage}\n\nEscribe:\n1️⃣ para recibir el archivo como MP3.\n2️⃣ para recibir el archivo como MP4.`, m);
-
-        confirmation[m.sender] = {
-            sender: m.sender,
-            to: who,
-            url: url,
-            chat: chat,
-            timeout: setTimeout(() => {
-                delete confirmation[m.sender];
-            }, 60000), // 1 minuto de espera
-        };
-    } else {
         conn.sendButton(m.chat, playMessage, "Instagram: @tuusuario", thumbnail, [
             ['🎶 MP3', `${usedPrefix}yta ${url}`],
             ['🎥 MP4', `${usedPrefix}ytv ${url}`]
