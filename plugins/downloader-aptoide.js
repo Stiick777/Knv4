@@ -1,26 +1,63 @@
-import Starlights from "@StarlightsTeam/Scraper"
+let handler = async (m, { conn, args }) => {
+  if (!args[0]) {
+    return conn.reply(m.chat, '[ 🌟 ] Ingresa el nombre de la aplicación que quieres descargar. Ejemplo:\nClash Royale', m);
+  }
 
-let handler = async (m, { conn, text, usedPrefix, command }) => {
-if (!text) return conn.reply(m.chat, '[ ✰ ] Ingresa el nombre de la aplicación que deseas descargar de *Aptoide* junto al comando.\n\n`» Ejemplo :`\n' + `> *${usedPrefix + command}* WhatsApp`, m, rcanal)
-await m.react('🕓')
 try {
-let { name, version, amount_downloads, size, thumbnail, dl_url } = await Starlights.aptoide(text)
-if (size.includes('GB') || size.replace(' MB', '') > 300) { return await m.reply('El archivo pesa mas de 300 MB, se canceló la Descarga.')}
-let txt = `*乂  A P T O I D E  -  D O W N L O A D*\n\n`
-    txt += `	✩   *Nombre* : ${name}\n`
-    txt += `	✩   *Version* : ${version}\n`
-    txt += `	✩   *Descargas* : ${amount_downloads}\n`
-    txt += `	✩   *Peso* :  ${size}\n\n`
-    txt += `*- ↻ El archivo se esta enviando espera un momento, soy lenta. . .*`
-await conn.sendFile(m.chat, thumbnail, 'thumbnail.jpg', txt, m, null, rcanal)
-await conn.sendMessage(m.chat, {document: { url: dl_url }, mimetype: 'application/vnd.android.package-archive', fileName: name + '.apk', caption: null }, {quoted: m})
-await m.react('✅')
-} catch {
-await m.react('✖️')
-}}
-handler.help = ['aptoide *<búsqueda>*']
-handler.tags = ['downloader']
-handler.command = ['aptoide', 'apk']
-handler.register = true 
-//handler.limit = 5
-export default handler
+    await m.react('🕛')
+    let resDelirius = await fetch(`https://delirius-apiofc.vercel.app/download/apk?query=${args[0]}`);
+    let resultDelirius = await resDelirius.json();
+
+    if (resultDelirius.status && resultDelirius.data) {
+        let { name, size, image, download, developer, publish, id } = resultDelirius.data;
+        let textoDelirius = `  ❯───「 𝗔𝗣𝗞 𝗗𝗢𝗪𝗡𝗟𝗢𝗔𝗗 」───❮
+        ✦ 𝐍𝐨𝐦𝐛𝐫𝐞 : ⇢ ${name} 📛
+        ✦ 𝐓𝐚𝐦𝐚𝐧̃𝐨 : ⇢ ${size} ⚖️
+        ✦ 𝐃𝐞𝐬𝐚𝐫𝐫𝐨𝐥𝐥𝐚𝐝𝐨𝐫 : ⇢ ${developer} 🛠️
+        ✦ 𝐈𝐃 : ⇢ ${id} 🆔
+        ✦ 𝐅𝐞𝐜𝐡𝐚 𝐝𝐞 𝐏𝐮𝐛𝐥𝐢𝐜𝐚𝐜𝐢𝐨́𝐧 : ⇢ ${publish} 📅
+
+    ## Su aplicación se enviará en un momento POR FAVOR ESPERE . . .`;
+
+        await conn.sendFile(m.chat, image, name + '.jpg', textoDelirius, m);
+        await conn.sendMessage(m.chat, { 
+            document: { url: download }, 
+            mimetype: 'application/vnd.android.package-archive', 
+            fileName: name + '.apk', 
+            caption: '' 
+        }, { quoted: m });
+        await m.react('✅')  
+    } else {
+        throw new Error('No se encontraron resultados en la API de Delirius');
+    }
+} catch (error) {
+    try {
+        await m.react('🕛')
+      let resDorratz = await fetch(`https://api.dorratz.com/v2/apk-dl?text=${args[0]}`);
+      let resultDorratz = await resDorratz.json();
+      let { name, size, lastUpdate, icon, dllink: URL, package: packe } = resultDorratz;
+
+      let textoDorratz = `  ❯───「 𝗔𝗣𝗞 𝗗𝗢𝗪𝗡𝗟𝗢𝗔𝗗 」───❮
+        ✦ 𝐍𝐨𝐦𝐛𝐫𝐞 : ⇢ ${name} 📛
+        ✦ 𝐓𝐚𝐦𝐚𝐧̃𝐨 : ⇢ ${size} ⚖️
+        ✦ 𝐏𝐚𝐜𝐤𝐚𝐠𝐞 : ⇢ ${packe} 📦
+        ✦ 𝐀𝐜𝐭𝐮𝐚𝐥𝐢𝐳𝐚𝐝𝐨 : ⇢ ${lastUpdate} 🗓️
+
+    ## Su aplicación se enviará en un momento POR FAVOR ESPERE . . .`;
+
+      await conn.sendFile(m.chat, icon, name + '.jpg', textoDorratz, m);
+      await conn.sendMessage(m.chat, { document: { url: URL }, mimetype: 'application/vnd.android.package-archive', fileName: name + '.apk', caption: '' }, { quoted: m });
+      await m.react('✅')  
+    } catch (error) {
+        await m.react('❌')  
+      conn.reply(m.chat, '[❗] No se pudo encontrar ni descargar la aplicación solicitada. Intenta de nuevo mas tarde.', m, );
+      console.error('Error en la descarga de APK:', error.message);
+    }
+  }
+};
+
+handler.command = ['apk', 'apkdl', 'modapk'];
+handler.help = ['apk'];
+handler.tags = ['downloader'];
+handler.group = true;
+export default handler;
