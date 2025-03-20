@@ -16,5 +16,5 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
 handler.tags = ["tools"]
 handler.help = ["ai *<texto>*"]
 handler.command = ["ai", "hoshino"]
-handler.register = true 
+handler.group = true 
 export default handler
