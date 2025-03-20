@@ -37,7 +37,7 @@ handler.help = ['chazam *<Audio/Video>*']
 handler.tags = ['tools']
 handler.command = /^(chazam)$/i
 //handler.limit = 3
-handler.register = true
+handler.group = true
 
 export default handler
 async function uploadFile(path) {
