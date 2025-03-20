@@ -65,7 +65,7 @@ handler.before = async function (m) {
 };
 
 handler.help = ['acertijo'];
-handler.tags = ['fun'];
+handler.tags = ['game'];
 handler.group = true;
 handler.command = ['acertijo', 'acert', 'adivinanza', 'tekateki'];
 
