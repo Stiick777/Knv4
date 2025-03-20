@@ -8,7 +8,7 @@ import fetch from 'node-fetch'
 let handler = async (m, { conn }) => {
 let q = m.quoted ? m.quoted : m
 let mime = (q.msg || q).mimetype || ''
-if (!mime.startsWith('image/')) return m.reply('🚩 Responde a una *Imagen.*')
+if (!mime.startsWith('image/')) return m.reply('✳️ Responde a una *Imagen.*')
 await m.react('🕓')
 let media = await q.download()
 let formData = new FormData()
@@ -26,5 +26,5 @@ await m.react('✅')
 handler.tags = ['tools']
 handler.help = ['describe']
 handler.command = /^(describe|describai)$/i
-handler.register = true 
+handler.group = true 
 export default handler
