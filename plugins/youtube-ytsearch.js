@@ -34,7 +34,7 @@ let handler = async (m, { conn, usedPrefix, text, args, command }) => {
 };
 
 handler.help = ['yts']
-handler.tags = ['ddownloader']
+handler.tags = ['search']
 handler.command = ['yts', 'ytsearch'] 
 handler.disabled = false
 handler.group = true
