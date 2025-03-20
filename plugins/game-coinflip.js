@@ -26,10 +26,10 @@ let handler = async (m, { conn, text, command, usedPrefix }) => {
     }
 }
 
-handler.help = ['coinflip']
+handler.help = ['cf']
 handler.tags = ['game']
 handler.command = ['suerte', 'cf', 'flip', 'coinflip']
-handler.register = true
+handler.group = true
 
 export default handler
 
