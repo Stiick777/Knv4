@@ -1,5 +1,5 @@
 let handler = async (m, { conn, command, text, usedPrefix }) => {
-if (!text) return m.reply(`🚩 Etiqueta a una persona.`)
+if (!text) return m.reply(`⚠️ Etiqueta a una persona.`)
 if (command == 'gay2') {
 conn.reply(m.chat, `
 _*${text.toUpperCase()}* *ES 🏳️‍🌈* *${(500).getRandom()}%* *GAY*_
@@ -68,6 +68,7 @@ mentions: m.mentionedJid
 } : {})}         
 }
 handler.help = ['gay2', 'lesbiana', 'pajero', 'pajera', 'puto', 'puta', 'manco', 'manca', 'rata', 'prostituta', 'prostituto'].map((v) => v + " *@user*")
-handler.tags = ['fun']
+handler.tags = ['game']
+handler.group = true
 handler.command = /^gay2|lesbiana|pajero|pajera|puto|puta|manco|manca|rata|prostituta|prostituto/i
 export default handler
