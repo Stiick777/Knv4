@@ -34,9 +34,9 @@ let text = `
 handler.help = ['lb']
 handler.tags = ['rpg']
 handler.command = ['leaderboard', 'lb'] 
-handler.register = true 
+handler.group = true 
 handler.fail = null
-handler.exp = 0
+
 
 export default handler
 
