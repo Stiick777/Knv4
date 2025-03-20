@@ -1,4 +1,4 @@
-import Starlights from '@StarlightsTeam/Scraper'
+/*import Starlights from '@StarlightsTeam/Scraper'
 import fetch from 'node-fetch'
 import { ytdl_han } from 'ytdl-han'
 
