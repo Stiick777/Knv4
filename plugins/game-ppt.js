@@ -45,7 +45,7 @@ handler.help = ['ppt']
 handler.tags = ['game']
 handler.command = ['ppt']
 //handler.group = true
-handler.register = true
+handler.group = true
 export default handler
 
 function segundosAHMS(segundos) {
