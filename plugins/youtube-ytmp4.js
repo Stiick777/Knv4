@@ -1,31 +1,50 @@
-import Starlights from '@StarlightsTeam/Scraper'
-import fetch from 'node-fetch' 
-let limit = 100
 
-let handler = async (m, { conn, args, text, isPrems, isOwner, usedPrefix, command }) => {
-if (!args[0]) return conn.reply(m.chat, '[ ✰ ] Ingresa el enlace del vídeo de *YouTube* junto al comando.\n\n`» Ejemplo :`\n' + `> *${usedPrefix + command}* https://youtu.be/QSvaCSt8ixs`, m, rcanal)
+import fetch from 'node-fetch';
 
-await m.react('🕓')
-try {
-let { title, size, quality, thumbnail, dl_url } = await Starlights.ytmp4(args[0])
+let handler = async (m, { conn, args, usedPrefix, command }) => {
+    if (!args[0]) {
+        return conn.reply(m.chat, `*[❗𝐈𝐍𝐅𝐎❗] 𝙄𝙉𝙂𝙍𝙀𝙎𝙀 𝙐𝙉 𝙀𝙉𝙇𝘼𝘾𝙀 𝘿𝙀 𝙔𝙊𝙐𝙏𝙐𝘽𝙀 𝙋𝘼𝙍𝘼 𝘿𝙀𝙎𝘾𝘼𝙍𝙂𝘼𝙍 𝙀𝙇 𝙑𝙄𝘿𝙀𝙊*`, m, );
+    }
 
-let img = await (await fetch(`${thumbnail}`)).buffer()
-if (size.split('MB')[0] >= limit) return conn.reply(m.chat, `El archivo pesa mas de ${limit} MB, se canceló la Descarga.`, m, rcanal).then(_ => m.react('✖️'))
-	let txt = '`乂  Y O U T U B E  -  M P 4`\n\n'
-       txt += `	✩   *Titulo* : ${title}\n`
-       txt += `	✩   *Calidad* : ${quality}\n`
-       txt += `	✩   *Tamaño* : ${size}\n\n`
-       txt += `> *- ↻ El vídeo se esta enviando espera un momento, soy lenta. . .*`
-await conn.sendFile(m.chat, img, 'thumbnail.jpg', txt, m, null, rcanal)
-await conn.sendMessage(m.chat, { video: { url: dl_url }, caption: `${title}`, mimetype: 'video/mp4', fileName: `${title}` + `.mp4`}, {quoted: m })
-await m.react('✅')
-} catch {
-await m.react('✖️')
-}}
-handler.help = ['ytmp4 *<link yt>*']
-handler.tags = ['downloader']
-handler.command = ['ytmp4', 'ytv', 'yt']
-//handler.limit = 1
-handler.register = true 
+    let youtubeLink = args[0];
+    
+    // Verificación del enlace de YouTube
+    const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/;
+    if (!youtubeRegex.test(youtubeLink)) {
+        return conn.reply(m.chat, `*[❗𝐈𝐍𝐅𝐎❗] Asegúrese de que sea un enlace de YouTube.*`, m, );
+    }
 
-export default handler
+try { 
+    await m.react('🕛'); // Indicar que está procesando
+
+
+    let apiResponse = await fetch(`https://api.agungny.my.id/api/youtube-videov2?url=${encodeURIComponent(youtubeLink)}`);
+    let data = await apiResponse.json();
+
+    if (data.status && data.result && data.result.url) {
+        const videoTitle = data.result.title;
+        const videoUrl = data.result.url;
+
+        await conn.sendMessage(m.chat, {
+            video: { url: videoUrl },
+            fileName: `${videoTitle}.mp4`,
+            mimetype: 'video/mp4',
+            caption: `😎 Su video by *_KanBot_*:\n\n*🎬 Título:* ${videoTitle}`,
+        }, { quoted: m });
+
+        return await m.react('✅'); // Confirmar éxito
+    }
+
+    throw new Error("La API no devolvió datos válidos");
+
+} catch (error) { 
+    console.warn("Error en la descarga del video:", error.message); 
+}
+};
+
+handler.tags = ['downloader'];
+handler.help = ['ytv']
+handler.command = ['ytmp4', 'ytvideo', 'ytv'];
+handler.group = true;
+
+export default handler;
