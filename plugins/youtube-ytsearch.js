@@ -1,29 +1,42 @@
-import Starlights from "@StarlightsTeam/Scraper"
 
-let handler = async (m, { conn, usedPrefix, command, text }) => {
-    if (!text) return m.reply('[ ✰ ] Ingresa el título de un video o canción de *YouTube*.\n\n`Ejemplo:`\n' + `> *${usedPrefix + command}* Mc Davo - Debes De Saber`)
-    await m.react('🕓')
-    try {
-    let results = await Starlights.ytsearch(text)
-    if (!results || !results.length) return conn.reply(m.chat, `No se encontraron resultados.`, m, rcanal)
-    let img = await (await fetch(`${results[0].thumbnail}`)).buffer()
-    let txt = '`乂  Y T  -  S E A R C H`'
-    results.forEach((video, index) => {
-        txt += `\n\n`
-        txt += `	✩  *Nro* : ${index + 1}\n`
-        txt += `	✩  *Titulo* : ${video.title}\n`
-        txt += `	✩  *Duración* : ${video.duration}\n`
-        txt += `	✩  *Publicado* : ${video.published}\n`
-        txt += `	✩  *Autor* : ${video.author}\n`
-        txt += `	✩  *Url* : ${video.url}`
-    })
-await conn.sendFile(m.chat, img, 'thumbnail.jpg', txt, m, null, rcanal)
-await m.react('✅')
-} catch {
-await m.react('✖️')
-}}
-handler.help = ['ytsearch *<búsqueda>*']
-handler.tags = ['search']
-handler.command = ['ytsearch', 'yts']
-handler.register = true 
+import yts from 'yt-search';
+let handler = async (m, { conn, usedPrefix, text, args, command }) => {
+    if (!text) throw `✳️ ${mssg.example} *${usedPrefix + command}* Lil Peep hate my life`;
+    m.react('📀');
+    
+    let result = await yts(text);
+    let ytres = result.videos;
+    
+
+    let listSections = [];
+    for (let index in ytres) {
+        let v = ytres[index];
+        listSections.push({
+            title: `${index}┃ ${v.title}`,
+            rows: [
+                {
+                    header: '🎶 MP3',
+                    title: "",
+                    description: `▢ ⌚ *${mssg.duration}:* ${v.timestamp}\n▢ 👀 *${mssg.views}:* ${v.views}\n▢ 📌 *${mssg.title}* : ${v.title}\n▢ 📆 *${mssg.aploud}:* ${v.ago}\n`, 
+                    id: `${usedPrefix}yta ${v.url}`
+                },
+                {
+                    header: "🎥 MP4",
+                    title: "" ,
+                    description: `▢ ⌚ *${mssg.duration}:* ${v.timestamp}\n▢ 👀 *${mssg.views}:* ${v.views}\n▢ 📌 *${mssg.title}* : ${v.title}\n▢ 📆 *${mssg.aploud}:* ${v.ago}\n`, 
+                    id: `${usedPrefix}ytv ${v.url}`
+                }
+            ]
+        });
+    }
+
+    await conn.sendList(m.chat, '  ≡ *YT-SEARCH MUSIC*🔎', `\n 📀 Resultados de: *${text}*\n\nKanBot by Stiiven`, `Click Aqui`, ytres[0].image, listSections, m);
+};
+
+handler.help = ['yts']
+handler.tags = ['ddownloader']
+handler.command = ['yts', 'ytsearch'] 
+handler.disabled = false
+handler.group = true
+
 export default handler
