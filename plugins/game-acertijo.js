@@ -1,52 +1,72 @@
-import fs from 'fs'
+import fs from 'fs';
+import similarity from 'similarity';
 
-let cooldown = 60000 
-let poin = 450
+const timeout = 60000; // 60 segundos
+const points = 5000; // XP ganada por acertijo
+const threshold = 0.72; // Umbral de similitud para respuestas cercanas
 
-let handler = async (m, { conn, usedPrefix }) => {
-let now = new Date()
-let lastUsage = global.db.data.users[m.sender].lastAcet || 0
-if (now - lastUsage < cooldown) {
-let remainingTime = cooldown - (now - lastUsage)
-return m.reply(`⏱️ ¡Espera ${msToTime(remainingTime)} antes de volver a usar el comando!`)
-}
-conn.tekateki = conn.tekateki ? conn.tekateki : {}
-let id = m.chat
-if (id in conn.tekateki) {
-conn.reply(m.chat, 'Todavía hay acertijos sin responder en este chat', conn.tekateki[id][0])
-return null
-}
-let tekateki = JSON.parse(fs.readFileSync(`./plugins/_acertijo.json`))
-let json = tekateki[Math.floor(Math.random() * tekateki.length)]
-let _clue = json.response
-let clue = _clue.replace(/[A-Za-z]/g, '_')
-let caption = `
-ⷮ *${json.question}*
-*• Tiempo:* ${(cooldown / 1000).toFixed(2)} segundos
-*• Bono:* +${poin} Exp
-`.trim()
-conn.tekateki[id] = [
-await conn.reply(m.chat, caption, m), json, poin,
-setTimeout(async () => {
-if (conn.tekateki[id]) {
-await conn.reply(m.chat, `Se acabó el tiempo!\n*Respuesta:* ${json.response}`, conn.tekateki[id][0])
-delete conn.tekateki[id]
-}
-}, cooldown)
-]
-global.db.data.users[m.sender].lastAcet = now
-}
-handler.help = ['acertijo']
-handler.tags = ['game']
-handler.command = /^(acertijo|acert|pregunta|adivinanza|tekateki)$/i
-export default handler
+const handler = async (m, { conn }) => {
+  conn.tekateki = conn.tekateki || {};
+  const id = m.chat;
 
-function msToTime(duration) {
-    var seconds = Math.floor((duration / 1000) % 60),
-        minutes = Math.floor((duration / (1000 * 60)) % 60)
+  if (id in conn.tekateki) {
+    return conn.reply(m.chat, '⚠️ Ya hay un acertijo activo en este chat. Resuélvelo antes de iniciar otro.', conn.tekateki[id].message);
+  }
 
-    minutes = (minutes < 10) ? "0" + minutes : minutes
-    seconds = (seconds < 10) ? "0" + seconds : seconds
+  // Cargar acertijos desde el archivo JSON
+  const tekateki = JSON.parse(fs.readFileSync('./src/game/acertijo.json'));
+  const json = tekateki[Math.floor(Math.random() * tekateki.length)];
 
-    return minutes + " Minuto(s) " + seconds + " Segundo(s)"
-}
+  const caption = `
+ⷮ🚩 *ACERTIJO - KANBOT*
+✨️ *${json.question}*
+
+⏱️ *Tiempo:* ${(timeout / 1000).toFixed(0)} segundos
+🎁 *Premio:* *+${points} XP* ⚡
+  
+📝 *Responde con la respuesta correcta en este mensaje.*`.trim();
+
+  conn.tekateki[id] = {
+    message: await conn.reply(m.chat, caption, m),
+    json,
+    points,
+    timeout: setTimeout(async () => {
+      if (conn.tekateki[id]) {
+        await conn.reply(m.chat, `⏳ *¡Tiempo agotado!*\nLa respuesta correcta era: *${json.response}*`, conn.tekateki[id].message);
+        delete conn.tekateki[id];
+      }
+    }, timeout),
+  };
+};
+
+handler.before = async function (m) {
+  const id = m.chat;
+  this.tekateki = this.tekateki || {};
+
+  if (!(id in this.tekateki)) return;
+
+  let { message, json, points, timeout } = this.tekateki[id];
+
+  if (!m.quoted || m.quoted.id !== message.id) return;
+
+  let userResponse = m.text.toLowerCase().trim();
+  let correctAnswer = json.response.toLowerCase().trim();
+
+  if (userResponse === correctAnswer) {
+    global.db.data.users[m.sender].exp += points;
+    m.reply(`✅ ¡Respuesta correcta!\n🎉 Has ganado *+${points} XP* ⚡`);
+    clearTimeout(timeout);
+    delete this.tekateki[id];
+  } else if (similarity(userResponse, correctAnswer) >= threshold) {
+    m.reply(`🤏 ¡Casi! Estás muy cerca, inténtalo de nuevo.`);
+  } else {
+    m.reply(`❌ Respuesta incorrecta. ¡Sigue intentando hasta que se acabe el tiempo!`);
+  }
+};
+
+handler.help = ['acertijo'];
+handler.tags = ['fun'];
+handler.group = true;
+handler.command = ['acertijo', 'acert', 'adivinanza', 'tekateki'];
+
+export default handler;
