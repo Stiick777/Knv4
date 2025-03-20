@@ -4,7 +4,7 @@ const handler = async (m, {conn, usedPrefix, command}) => {
   try {    
   let q = m.quoted ? m.quoted : m
   let mime = (q.msg || q).mimetype || q.mediaType || ""
-  if (!mime) return conn.reply(m.chat, `🚩 Responde a una *Imagen.*`, m, rcanal)
+  if (!mime) return conn.reply(m.chat, `✳️ Responde a una *Imagen.*`, m, rcanal)
   await m.react('🕓')
   let img = await q.download?.()
   let pr = await remini(img, "enhance")
@@ -16,7 +16,7 @@ const handler = async (m, {conn, usedPrefix, command}) => {
 handler.help = ["hd"]
 handler.tags = ["tools"]
 handler.command = ["remini", "hd", "enhance"]
-handler.register = true 
+handler.group = true 
 export default handler
 
 async function remini(imageData, operation) {
