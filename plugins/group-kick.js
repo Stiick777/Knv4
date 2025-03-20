@@ -7,12 +7,12 @@ let user = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted.sender
 let owr = m.chat.split`-`[0]
 await conn.groupParticipantsUpdate(m.chat, [user], 'remove')
 m.reply(`🙂 Usuario eliminado.`)
-m.reply(`Lo siento, acabas de ser eliminado del grupo.`, user)
+//m.reply(`Lo siento, acabas de ser eliminado del grupo.`, user)
 }
 
 handler.help = ['kick *@user*']
 handler.tags = ['group']
-handler.command = ['kick', 'expulsar'] 
+handler.command = ['kick', 'kc', 'expulsar'] 
 handler.admin = true
 handler.group = true
 handler.botAdmin = true
