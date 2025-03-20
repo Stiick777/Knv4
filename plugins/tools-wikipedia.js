@@ -17,7 +17,7 @@ let handler = async (m, { text }) => {
 }
 
 handler.help = ['wikipedia']
-handler.tags = ['tools']
+handler.tags = ['search']
 handler.command = ['wiki', 'wikipedia'] 
 
 export default handler
