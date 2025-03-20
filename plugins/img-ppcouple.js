@@ -10,9 +10,9 @@ await m.react('✅')
 } catch {
 await m.react('✖️')
 }}
-handler.help = ['ppcouple']
+handler.help = ['cxc']
 handler.tags = ['img']
-handler.command = ['ppcouple', 'par']
-handler.register = true 
+handler.command = ['ppcouple', 'cxc']
+handler.group = true 
 //handler.limit = 1
 export default handler
