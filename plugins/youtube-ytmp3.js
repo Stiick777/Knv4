@@ -1,78 +1,75 @@
-import Starlights from '@StarlightsTeam/Scraper'
-import fetch from 'node-fetch'
-import { ytdl_han } from 'ytdl-han'
+import fetch from 'node-fetch';
+import axios from 'axios';
+import fs from 'fs';
+import { exec } from 'child_process';
 
-const limit = 100
+const handler = async (m, { args, conn }) => {
+  if (!args[0]) 
+    return m.reply('*[❗𝐈𝐍𝐅𝐎❗] 𝙄𝙉𝙂𝙍𝙀𝙎𝙀 𝙀𝙇 𝘾𝙊𝙈𝘼𝙉𝘿𝙊 𝙈𝘼𝙎 𝙐𝙉 𝙀𝙉𝙇𝘼𝘾𝙀 𝘿𝙀 𝙔𝙊𝙐𝙏𝙐𝘽𝙀*');
 
-let handler = async (m, { conn, args, usedPrefix, command }) => {
- if (!args[0]) return conn.reply(m.chat, '[ ✰ ] Ingresa el enlace del vídeo de *YouTube* junto al comando.\n\n`» Ejemplo :`\n' + `> *${usedPrefix + command}* https://youtu.be/QSvaCSt8ixs`, m)
-await m.react('🕓')
-try {
-var gi = await ytdl_han(args[0], "128kbps") 
-var base64 = Buffer.from(gi.data.format, 'base64')
-if (parseFloat(gi.data.size.split('MB')[0]) >= limit) return m.reply(`El archivo pesa más de ${limit} MB, se canceló la descarga.`).then(() => m.react('✖️'))    
-let txt = '`乂  Y O U T U B E  -  M P 3`\n\n' +
-`    ✩   *Título* : ${gi.data.title}\n` +
-`    ✩   *Calidad* : 128kbps\n` +
-`    ✩   *Tamaño* : ${gi.data.size}\n\n` +
-'> *- ↻ El audio se está enviando, espera un momento...*'
-await conn.sendFile(m.chat, gi.data.thumbnail, 'thumbnail.jpg', txt, m)
-await conn.sendMessage(m.chat, { audio: base64, mimetype: 'audio/mpeg', fileName: `${gi.data.title}.mp3` }, { quoted: m })
-await m.react('✅')
-} catch (error) {
-try {
-await m.react('🕓')
-let { title, size, quality, thumbnail, dl_url } = await Starlights.ytmp3(args[0])
-if (parseFloat(size.split('MB')[0]) >= limit) return m.reply(`El archivo pesa más de ${limit} MB, se canceló la descarga.`).then(() => m.react('✖️'))
-let img = await (await fetch(thumbnail)).buffer()
-let txt2 = '`乂  Y O U T U B E  -  M P 3`\n\n' +
-`    ✩   *Título* : ${title}\n` +
-`    ✩   *Calidad* : ${quality}\n` +
-`    ✩   *Tamaño* : ${size}\n\n` +
-'> *- ↻ El audio se está enviando, espera un momento...*'
-await conn.sendFile(m.chat, img, 'thumbnail.jpg', txt2, m)
-await conn.sendMessage(m.chat, { audio: { url: dl_url }, fileName: `${title}.mp3`, mimetype: 'audio/mp4' }, { quoted: m })
-await m.react('✅')
-} catch (error) {
-await m.react('✖️')
-}}}
-handler.help = ['ytmp3 *<link yt>*']
-handler.tags = ['downloader']
-handler.command = ['ytmp3', 'yta', 'fgmp3']
-handler.register = true
-export default handler
+  const youtubeLink = args[0];
 
-//patch
-/*import Starlights from '@StarlightsTeam/Scraper'
-import fetch from 'node-fetch'
+  // Expresión regular mejorada para validar enlaces de YouTube
+  const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|embed\/|v\/)|youtu\.be\/)[a-zA-Z0-9_-]{11}(\S*)?$/;
 
-const limit = 100
+if (!youtubeRegex.test(youtubeLink)) {
+  return m.reply('*[❗𝐄𝐑𝐑𝐎𝐑❗] 𝙀𝙇 𝙀𝙉𝙇𝘼𝘾𝙀 𝙋𝙍𝙊𝙋𝙊𝙍𝘾𝙄𝙊𝙉𝘼𝘿𝙊 𝙉𝙊 𝙀𝙎 𝙑𝘼́𝙇𝙄𝘿𝙊. 𝘼𝙎𝙀𝙂𝙐́𝙍𝘼𝙏𝙀 𝘿𝙀 𝙄𝙉𝙂𝙍𝙀𝙎𝘼𝙍 𝙐𝙉 𝙀𝙉𝙇𝘼𝘾𝙀 𝘾𝙊𝙍𝙍𝙀𝘾𝙏𝙊 𝘿𝙀 𝙔𝙊𝙐𝙏𝙐𝘽𝙀.*');
+}
 
-let handler = async (m, { conn, args, usedPrefix, command }) => {
-    if (!args[0]) { return conn.reply(m.chat, '[ ✰ ] Ingresa el enlace del vídeo de *YouTube* junto al comando.\n\n`» Ejemplo :`\n' + `> *${usedPrefix + command}* https://youtu.be/QSvaCSt8ixs`, m, rcanal)}
+   
+        try {
+            await m.react('🕓'); // Reaccionar mientras procesa
 
-await m.react('🕓')
-try {
-let { title, size, quality, thumbnail, dl_url } = await Starlights.ytmp3(args[0])
+            // URL de la API para obtener el audio
+            const apiUrl = `https://api.siputzx.my.id/api/d/ytmp3?url=${encodeURIComponent(youtubeLink)}`;
+            let apiResponse = await fetch(apiUrl);
+            let response = await apiResponse.json();
 
-if (parseFloat(size.split('MB')[0]) >= limit) { return m.reply(`El archivo pesa más de ${limit} MB, se canceló la descarga.`).then(() => m.react('✖️'))}
+            // Verificar si la API devolvió un resultado válido
+            if (response.status === true && response.data && response.data.dl) {
+                const { dl, title } = response.data;
 
-let img = await (await fetch(thumbnail)).buffer()
-let txt = '`乂  Y O U T U B E  -  M P 3`\n\n' +
-       `	✩   *Título* : ${title}\n` +
-       `	✩   *Calidad* : ${quality}\n` +
-       `	✩   *Tamaño* : ${size}\n\n` +
-       '> *- ↻ El audio se está enviando, espera un momento...*'
+                let originalPath = './temp_audio.mp3';
+                let convertedPath = './converted_audio.mp3';
 
-await conn.sendFile(m.chat, img, 'thumbnail.jpg', txt, m, null, rcanal)
-await conn.sendMessage(m.chat, { audio: { url: dl_url }, fileName: `${title}.mp3`, mimetype: 'audio/mp4' }, { quoted: m })
-await m.react('✅')
-} catch {
-await m.react('✖️')
-}}
-handler.help = ['ytmp3 *<link yt>*']
-handler.tags = ['downloader']
-handler.command = ['ytmp3', 'yta', 'fgmp3']
-handler.register = true
+                // Descargar el audio
+                const audioResponse = await axios.get(dl, { responseType: 'arraybuffer' });
+                fs.writeFileSync(originalPath, audioResponse.data);
 
-export default handler*/
+                // Convertir el audio a un formato compatible con WhatsApp (64kbps, 44100Hz)
+                await new Promise((resolve, reject) => {
+                    exec(`ffmpeg -i ${originalPath} -ar 44100 -ab 64k -y ${convertedPath}`, (err) => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+
+                // Enviar el audio convertido
+                await conn.sendMessage(m.chat, {
+                    audio: fs.readFileSync(convertedPath),
+                    mimetype: 'audio/mp4',
+                    ptt: false, // Enviar como audio normal
+                    fileName: `${title}.mp3`,
+                }, { quoted: m });
+
+                // Eliminar archivos temporales
+                fs.unlinkSync(originalPath);
+                fs.unlinkSync(convertedPath);
+
+                return await m.react('✅'); // Reacción de éxito
+            }
+
+            throw new Error("API falló o no retornó datos válidos");
+        } catch (error) {
+            console.warn("Error en la API:", error.message);
+            await m.reply("❌ Error al procesar la solicitud. Inténtalo mas tarde.");
+        }
+
+};
+
+handler.help = ['yta'];
+handler.tags = ['downloader'];
+handler.command = /^yta$/i
+handler.group = true;
+
+export default handler;
