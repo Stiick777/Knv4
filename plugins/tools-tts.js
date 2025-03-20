@@ -15,7 +15,7 @@ try { res = await tts(text, lang) }
 catch (e) {
 m.reply(e + '')
 text = args.join(' ')
-if (!text) throw `🚩 Ingresa un texto junto al comando.`
+if (!text) throw `✳️ Ingresa un texto junto al comando.`
 res = await tts(text, defaultLang)
 } finally {
 if (res) conn.sendFile(m.chat, res, 'tts.opus', null, m, true)    
@@ -24,7 +24,7 @@ handler.help = ['tts *<texto>*']
 handler.tags = ['tools']
 handler.command = /^g?tts$/i
 //handler.limit = 1
-handler.register = true 
+handler.group = true
 export default handler
 
 function tts(text, lang = 'es') {
