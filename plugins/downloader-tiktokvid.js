@@ -76,7 +76,7 @@ const handler = async (m, { conn, args, usedPrefix, command }) => {
   }
 };
 
-handler.tags = ['ddownloader'];
+handler.tags = ['downloader'];
 handler.help = ['tiktok'];
 handler.command = ['tiktok', 'ttdl', 'tiktokdl', 'tiktoknowm', 'tt', 'ttnowm', 'tiktokaudio'];
 handler.group = true;
