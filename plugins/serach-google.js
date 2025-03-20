@@ -1,24 +1,38 @@
-import {googleIt} from '@bochilteam/scraper';
-import google from 'google-it';
 import axios from 'axios';
-let handler = async (m, { conn, command, args, usedPrefix }) => {
-  const fetch = (await import('node-fetch')).default;
-  const text = args.join` `;
-  if (!text) return conn.reply(m.chat, '🚩 Ingresa lo que deseas buscar junto al comando.', m)
-  await m.react('🕓')
-  let img = 'https://i.ibb.co/P5kZNFF/file.jpg'
-const url = 'https://google.com/search?q=' + encodeURIComponent(text);
-google({'query': text}).then(res => {
-let teks = `\t\t\t*乂  S E A R C H  -  G O O G L E*\n\n`
-for (let g of res) {
-teks += `*${g.title}*\n${g.link}\n${g.snippet}\n\n`
-} 
-conn.sendFile(m.chat, img, 'thumbnail.jpg', teks, m).then(_ => m.react('✅'))
-})
-}
-handler.help = ['google *<texto>*']
-handler.tags = ['tools', 'search']
-handler.command = /^googlef?$/i
-//handler.limit = 1
-handler.group = true 
+
+let handler = async (m, { conn, args }) => {
+    const text = args.join(' ');
+    if (!text) {
+        return conn.reply(m.chat, '🍁 Ingresa lo que deseas buscar en Google.', m);
+    }
+
+    try {
+        await m.react('🤔');
+        
+        const response = await axios.get(`https://apidl.asepharyana.cloud/api/search/google?query=${encodeURIComponent(text)}`);
+        const data = response.data;
+
+        if (data.length > 0) {
+            let responseText = `✴️ *Resultados de* : ${text}\n\n`;
+            data.forEach((item) => {
+                responseText += `🔰 *Título:* ${item.title}\n🔷 *Descripción:* ${item.description}\n🔗 *URL:* ${item.link}\n\n`;
+            });
+            
+            conn.reply(m.chat, responseText, m);
+            await m.react('✅');
+        } else {
+            conn.reply(m.chat, '🔥 No se encontraron resultados.', m);
+        }
+    } catch (error) {
+        await m.react('❌');
+        console.error('Error al buscar en la API:', error);
+        conn.reply(m.chat, '❌ Error al realizar la búsqueda. Inténtalo de nuevo más tarde.', m);
+    }
+};
+
+handler.help = ['google <búsqueda>'];
+handler.tags = ['search'];
+handler.command = ['google'];
+handler.group = true;
+
 export default handler;
