@@ -66,6 +66,7 @@
 		"url-file-size": "*",
 		"pino": "*",
 		"qrcode": "*",
+		"megajs": "^1.1.3",
 		"qrcode-terminal": "*",
 		"readline": "*",
 		"sanzy-spotifydl": "*",
