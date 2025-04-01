@@ -57,6 +57,7 @@
 		"lodash": "*",
 		"lowdb": "^3.0.0",
 		"jimp": "*",
+		"node-cache": "*",
 		"node-fetch": "^3.2.10",
 		"moment-timezone": "*",
 		"translate-google-api": "^1.0.4",
