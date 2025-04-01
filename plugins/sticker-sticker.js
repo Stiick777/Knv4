@@ -22,7 +22,7 @@ let handler = async (m, { conn, args }) => {
     }
     await m.react('🕓')
 
-    const stickers = await toWebp(buffer) 
+    const stickers = await toWebp(buffer, { name: 'MiSticker', author: 'Nexus-Bot' });
     
     await conn.sendFile(m.chat, stickers, 'sticker.webp', '', m)
     await m.react('✅')
@@ -38,41 +38,43 @@ handler.group = true
 
 export default handler
 
-async function toWebp(buffer, opts = {}) {
-  const { name = 'KanBot', author = 'by Stiiven', emojis = [] } = opts
-  const { ext } = await fromBuffer(buffer)
-  if (!/(png|jpg|jpeg|mp4|mkv|m4p|gif|webp)/i.test(ext)) throw 'Media no compatible.'
+async function toWebp(buffer, opts = {}) {  
+  const { name = 'Sticker', author = 'Bot' } = opts;  
+  const { ext } = await fromBuffer(buffer);  
+  if (!/(png|jpg|jpeg|mp4|mkv|m4p|gif|webp)/i.test(ext)) throw 'Media no compatible.';  
 
-  const input = path.join(global.tempDir || './tmp', `${Date.now()}.${ext}`)
-  const output = path.join(global.tempDir || './tmp', `${Date.now()}.webp`)
-  fs.writeFileSync(input, buffer)
+  const input = path.join(global.tempDir || './tmp', `${Date.now()}.${ext}`);  
+  const output = path.join(global.tempDir || './tmp', `${Date.now()}.webp`);  
+  fs.writeFileSync(input, buffer);  
 
-  let aspectRatio = opts.isFull
-    ? `scale='min(320,iw)':min'(320,ih)':force_original_aspect_ratio=decrease`
-    : `scale='if(gt(iw,ih),-1,299):if(gt(iw,ih),299,-1)', crop=299:299:exact=1`
+  let aspectRatio = opts.isFull  
+    ? `scale='min(320,iw)':min'(320,ih)':force_original_aspect_ratio=decrease`  
+    : `scale='if(gt(iw,ih),-1,299):if(gt(iw,ih),299,-1)', crop=299:299:exact=1`;  
 
-  let options = [
-    '-vcodec', 'libwebp',
-    '-vf', `${aspectRatio}, fps=15, pad=320:320:-1:-1:color=white@0.0, split [a][b]; [a] palettegen=reserve_transparent=on:transparency_color=ffffff [p]; [b][p] paletteuse`,
-    ...(ext.match(/(mp4|mkv|m4p|gif)/) ? ['-loop', '0', '-ss', '00:00:00', '-t', '00:00:10', '-preset', 'default', '-an', '-vsync', '0'] : [])
-  ]
+  let options = [  
+    '-vcodec', 'libwebp',  
+    '-vf', `${aspectRatio}, fps=15, pad=320:320:-1:-1:color=white@0.0, split [a][b]; [a] palettegen=reserve_transparent=on:transparency_color=ffffff [p]; [b][p] paletteuse`,  
+    '-metadata', `title=${name}`,  
+    '-metadata', `author=${author}`,  
+    ...(ext.match(/(mp4|mkv|m4p|gif)/) ? ['-loop', '0', '-ss', '00:00:00', '-t', '00:00:10', '-preset', 'default', '-an', '-vsync', '0'] : [])  
+  ];  
 
-  return new Promise((resolve, reject) => {
-    fluent(input)
-      .addOutputOptions(options)
-      .toFormat('webp')
-      .save(output)
-      .on('end', () => {
-        const result = fs.readFileSync(output)
-        fs.unlinkSync(input)
-        fs.unlinkSync(output)
-        resolve(result)
-      })
-      .on('error', (err) => {
-        fs.unlinkSync(input)
-        reject(err)
-      })
-  })
+  return new Promise((resolve, reject) => {  
+    fluent(input)  
+      .addOutputOptions(options)  
+      .toFormat('webp')  
+      .save(output)  
+      .on('end', () => {  
+        const result = fs.readFileSync(output);  
+        fs.unlinkSync(input);  
+        fs.unlinkSync(output);  
+        resolve(result);  
+      })  
+      .on('error', (err) => {  
+        fs.unlinkSync(input);  
+        reject(err);  
+      });  
+  });  
 }
 
 function isUrl(text) {
