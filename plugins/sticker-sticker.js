@@ -39,7 +39,7 @@ handler.group = true
 export default handler
 
 async function toWebp(buffer, opts = {}) {
-  const { name = '', author = '', emojis = [] } = opts
+  const { name = 'KanBot', author = 'by Stiiven', emojis = [] } = opts
   const { ext } = await fromBuffer(buffer)
   if (!/(png|jpg|jpeg|mp4|mkv|m4p|gif|webp)/i.test(ext)) throw 'Media no compatible.'
 
